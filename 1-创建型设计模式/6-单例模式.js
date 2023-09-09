@@ -8,7 +8,6 @@ const Conf = (function () {
         },
     };
 })();
-console.log(Conf.get("MAX_NUM"));
 
 let LazySingle = (function () {
     let _instance = null;
@@ -27,16 +26,15 @@ let LazySingle = (function () {
     };
 })();
 
-const instance = LazySingle();
 class Test {
+    static _instance = null;
     constructor(name, work) {
-        let _instance = null;
-        if (!_instance) {
-            this.name = name;
+        if (!Test._instance) {
+            Test._instance = this;
             this.work = work;
-        } else {
-            return _instance;
+            this.name = name;
         }
+        return Test._instance;
     }
 }
 
@@ -44,3 +42,4 @@ const test1 = new Test("张飞", "打野");
 const test2 = new Test("赵云", "上单");
 console.log(test1);
 console.log(test2);
+console.log(test1 === test2);
