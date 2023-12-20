@@ -41,5 +41,5 @@ class NotificationService {
     const aliLogger = new AliLogger();
     const cloudLoggerAdapter = new CloudLoggerAdapter(aliLogger);
     const notificationService = new NotificationService(cloudLoggerAdapter);
-    await notificationService.send("哈喽，To Cloud");
+    await notificationService.send("哈喽,To Cloud");
 })();
