@@ -1,45 +1,27 @@
-/**
- * 适配器模式的作用是解决两个软件实体间的接口不兼容的问题
- *
- */
-interface Logger {
-    info(message: string): Promise<void>;
+// 类适配器
+// 目标对象
+interface Target {
+    request(): void;
 }
 
-interface CloudLogger {
-    sendToServer(message: string, type: string): Promise<void>;
+// 被适配者
+class Adaptee {
+    constructor() {}
+    // 这是源角色 有自己的业务逻辑
+    public specificRequest(): void {}
 }
 
-class AliLogger implements CloudLogger {
-    public async sendToServer(message: string, type: string): Promise<void> {
-        console.info(message);
-        console.info("我是 AliLogger ");
+// 适配器
+class Adapter extends Adaptee implements Target {
+    constructor() {
+        super();
+    }
+
+    public request(): void {
+        super.specificRequest();
     }
 }
 
-class CloudLoggerAdapter implements Logger {
-    protected cloudLogger: CloudLogger;
-    constructor(cloudLogger: CloudLogger) {
-        this.cloudLogger = cloudLogger;
-    }
-    public async info(message: string): Promise<void> {
-        await this.cloudLogger.sendToServer(message, "info");
-    }
-}
+const target: Target = new Adapter();
 
-class NotificationService {
-    protected logger: Logger;
-    constructor(logger: Logger) {
-        this.logger = logger;
-    }
-    public async send(message: string): Promise<void> {
-        await this.logger.info(`Notification sended: ${message}`);
-    }
-}
-
-(async () => {
-    const aliLogger = new AliLogger();
-    const cloudLoggerAdapter = new CloudLoggerAdapter(aliLogger);
-    const notificationService = new NotificationService(cloudLoggerAdapter);
-    await notificationService.send("哈喽,To Cloud");
-})();
+target.request();
